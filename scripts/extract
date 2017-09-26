@@ -24,19 +24,26 @@ if [ -z "$3" ]; then
   echo "usage: $0 package_name file_pattern target_dir"
   exit 1
 fi
-
-[ -z "$PKG_URL" -o -z "$PKG_SOURCE_NAME" ] && exit 1
+[ -z "$PKG_URL" -a -z "$PKG_GIT_URL" ] && exit 1
 [ ! -d "$SOURCES/$1" -o ! -d "$3" ] && exit 1
 
-case $PKG_SOURCE_NAME in
+if [ -n "$PKG_URL" ]; then
+  for i in $PKG_URL; do
+    FILE="$PKG_SOURCE_NAME"
+  done
+elif [ -n "$PKG_GIT_URL" ]; then
+  FILE="$PKG_NAME-$PKG_VERSION.tar.xz"
+fi
+for i in $FILE; do
+ case $i in
   $2)
-    f="$SOURCES/$1/$PKG_SOURCE_NAME"
+    f="$SOURCES/$1/$i"
     if [ ! -f $f ]; then
       echo "error: File $PKG_SOURCE_NAME doesn't exists in package $1 sources directory"
       echo "have you called scripts/extract before scripts/get ?"
       exit 1
     fi
-    case $PKG_SOURCE_NAME in
+    case $i in
       *.tar)
         tar xf $f -C $3
         ;;
@@ -70,4 +77,6 @@ case $PKG_SOURCE_NAME in
         ;;
     esac
     ;;
-esac
+ esac
+done
+

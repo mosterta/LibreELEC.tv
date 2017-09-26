@@ -17,19 +17,23 @@
 ################################################################################
 
 PKG_NAME="libvdpau"
-PKG_VERSION="1.1.1"
+PKG_VERSION="6cc49af"
+PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="MIT"
 PKG_SITE="https://wiki.freedesktop.org/www/Software/VDPAU/"
-PKG_URL="https://secure.freedesktop.org/~aplattner/vdpau/$PKG_NAME-$PKG_VERSION.tar.gz"
-PKG_DEPENDS_TARGET="toolchain libX11 dri2proto libXext"
+PKG_GIT_URL="https://github.com/mosterta/libvdpau.git"
+PKG_GIT_BRANCH="master"
+PKG_SOURCE_DIR="libvdpau-$PKG_VERSION*"
+PKG_DEPENDS_TARGET="toolchain"
+PKG_PRIORITY="optional"
 PKG_SECTION="multimedia"
 PKG_SHORTDESC="libvdpau: a Video Decode and Presentation API for UNIX."
 PKG_LONGDESC="VDPAU is the Video Decode and Presentation API for UNIX. It provides an interface to video decode acceleration and presentation hardware present in modern GPUs."
 
 PKG_IS_ADDON="no"
-PKG_AUTORECONF="no"
+PKG_AUTORECONF="yes"
 
-PKG_CONFIGURE_OPTS_TARGET="--enable-dri2 \
+PKG_CONFIGURE_OPTS_TARGET="--disable-dri2 \
                            --disable-documentation \
                            --with-module-dir=/usr/lib/vdpau"

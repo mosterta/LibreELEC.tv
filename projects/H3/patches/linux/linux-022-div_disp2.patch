@@ -1,0 +1,230 @@
+diff --git a/drivers/video/sunxi/disp2/disp/de/disp_enhance.c b/drivers/video/sunxi/disp2/disp/de/disp_enhance.c
+index e5af356..8e44a07 100755
+--- a/drivers/video/sunxi/disp2/disp/de/disp_enhance.c
++++ b/drivers/video/sunxi/disp2/disp/de/disp_enhance.c
+@@ -91,7 +91,7 @@ static s32 disp_enhance_update_regs(struct disp_enhance* enhance)
+ 	/* size likely change while it depend on layer size */
+ 	//if(enhancep->applied) {
+ 	{
+-		DE_INF("enhance %d, enable=%d\n", enhance->disp, enhancep->config.info.enable);
++		//DE_INF("enhance %d, enable=%d\n", enhance->disp, enhancep->config.info.enable);
+ 		disp_al_enhance_update_regs(enhance->disp);
+ 	}
+ 
+diff --git a/drivers/video/sunxi/disp2/disp/de/disp_manager.c b/drivers/video/sunxi/disp2/disp/de/disp_manager.c
+index a10dc80..c10a5b4 100755
+--- a/drivers/video/sunxi/disp2/disp/de/disp_manager.c
++++ b/drivers/video/sunxi/disp2/disp/de/disp_manager.c
+@@ -869,6 +869,7 @@ static s32 disp_mgr_update_regs(struct disp_manager *mgr)
+ 	disp_sys_irqunlock((void*)&mgr_data_lock, &flags);
+ #endif
+ 
++     //   disp_sys_irqlock((void*)&mgr_data_lock, &flags);
+ 	//disp_mgr_shadow_protect(mgr, true);
+ 	//FIXME update_regs, other module may need to sync while manager don't
+ 	//if(true == mgrp->applied)
+diff --git a/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_enhance.c b/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_enhance.c
+index 35a073f..7f68f1b 100755
+--- a/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_enhance.c
++++ b/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_enhance.c
+@@ -105,7 +105,7 @@ int de_enhance_apply(unsigned int screen_id, struct disp_enhance_config *config)
+ 
+ 	chno = vep_num[screen_id];
+ 
+-	__inf("disp %d, en=%d, sharp=%d\n", screen_id, config[0].info.enable, config[0].info.sharp);
++	//__inf("disp %d, en=%d, sharp=%d\n", screen_id, config[0].info.enable, config[0].info.sharp);
+ 	memcpy(&g_config[screen_id], config, sizeof(struct disp_enhance_config));
+ 	de_enhance_set_mode(g_format[screen_id], config);
+ 	for(ch_id=0; ch_id<chno; ch_id++)
+diff --git a/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_vsu.c b/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_vsu.c
+index 8fa34d1..deb22ad 100755
+--- a/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_vsu.c
++++ b/drivers/video/sunxi/disp2/disp/de/lowlevel_sun8iw7/de_vsu.c
+@@ -684,6 +684,9 @@ int de_vsu_recalc_scale_para(int coarse_status, unsigned int vsu_outw, unsigned
+ 							 scaler_para *fix_y_para, scaler_para *fix_c_para)
+ {
+ 	unsigned int tmp = 0;
++	if(vsu_outw == 0)
++		vsu_outw = 1;
++
+ 	if(coarse_status & DE_CS_HORZ)
+ 	{
+ 		tmp = N2_POWER(vsu_inw, VSU_PHASE_FRAC_BITWIDTH);
+@@ -697,6 +700,8 @@ int de_vsu_recalc_scale_para(int coarse_status, unsigned int vsu_outw, unsigned
+ 		fix_c_para->hphase = 0; //no meaning when coarse scale using
+ 	}
+ 
++	if(vsu_outh == 0)
++		vsu_outh = 1;
+ 	if(coarse_status & DE_CS_VERT)
+ 	{
+ 		tmp = N2_POWER(vsu_inh, VSU_PHASE_FRAC_BITWIDTH);
+diff --git a/drivers/video/sunxi/disp2/disp/dev_composer.c b/drivers/video/sunxi/disp2/disp/dev_composer.c
+index a492a71..01d3367 100755
+--- a/drivers/video/sunxi/disp2/disp/dev_composer.c
++++ b/drivers/video/sunxi/disp2/disp/dev_composer.c
+@@ -738,7 +738,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+         fencefd = kzalloc(( disp_data->aquireFenceCnt * sizeof(int)),GFP_KERNEL);
+         if(copy_from_user( fencefd, (void __user *)disp_data->aquireFenceFd, disp_data->aquireFenceCnt * sizeof(int)))
+         {
+-                printk("copy_from_user fail\n");
++                pr_err("copy_from_user faili 1\n");
+                 goto err;
+         }
+ 
+@@ -785,7 +785,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+         WB_data = kzalloc(sizeof(WB_data_list_t),GFP_KERNEL);
+         if(copy_from_user(&WB_data->WriteBackdata, (void __user *)disp_data->WriteBackdata, sizeof(WriteBack_t)))
+         {
+-            printk("copy_from_user WB_data fail\n");
++            pr_err("copy_from_user WB_data fail\n");
+             goto err;
+ 		}
+         WB_data->outaquirefence = sync_fence_fdget(WB_data->WriteBackdata.outaquirefencefd);
+@@ -820,7 +820,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+             fd[0] = get_unused_fd();
+             if (fd < 0)
+             {
+-                printk("get unused fd faild\n");
++                pr_err("get unused fd faild\n");
+                 goto err;
+             }
+             composer_priv.timeline_max++;
+@@ -849,7 +849,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+                 queue_work(composer_priv.Display_commit_work, &composer_priv.commit_work);
+             }
+ 	    }else{
+-	        printk("No layer from android set\n");
++	        pr_err("No layer from android set\n");
+ 	        goto err;
+         }
+     }else{
+@@ -858,7 +858,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+     }
+     if(copy_to_user((void __user *)disp_data->returnfenceFd, fd, sizeof(int)*2))
+     {
+-	    printk("copy_to_user fail\n");
++	    pr_err("copy_to_user fail 2\n");
+         goto err;
+ 	}
+ 	return 0;
+@@ -881,11 +881,14 @@ static int hwc_commit_ioctl(unsigned int cmd, unsigned long arg)
+         memset(composer_priv.tmptransfer, 0, sizeof(setup_dispc_data_t));
+         if(copy_from_user(composer_priv.tmptransfer, (void __user *)ubuffer[1], sizeof(setup_dispc_data_t)))
+         {
+-            printk("copy_from_user fail\n");
++            pr_err("copy_from_user fail\n");
+             return  -EFAULT;
+ 		}
+         ret = hwc_commit(composer_priv.tmptransfer);
+ 	}
++        else {
++          pr_err("hwc_commit ioctl cmd:%X unknown. COMMIT:%X\n", cmd, DISP_HWC_COMMIT);
++        }
+ 	return ret;
+ }
+ 
+@@ -1524,6 +1527,7 @@ typedef struct {
+ typedef struct
+ {
+     int                 layer_num[2];
++    int			layer_active[2];
+     disp_layer_config   layer_info[2][16];
+     int*                aquireFenceFd;
+     int                 aquireFenceCnt;
+@@ -1987,12 +1991,12 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+ 
+     fencefd = kzalloc(( disp_data->aquireFenceCnt * sizeof(int)), GFP_ATOMIC);
+     if(!fencefd){
+-        printk("out of momery , do not display.\n");
++        pr_err("out of momery , do not display.\n");
+         return -1;
+     }
+     if(copy_from_user( fencefd, (void __user *)disp_data->aquireFenceFd, disp_data->aquireFenceCnt * sizeof(int)))
+     {
+-            printk("copy_from_user fail\n");
++            pr_err("copy_from_user fail\n");
+             kfree(fencefd);
+             return  -1;
+     }
+@@ -2001,7 +2005,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+         fence = sync_fence_fdget(fencefd[cout]);
+         if(!fence)
+         {
+-            printk("sync_fence_fdget failed,fd[%d]:%d\n",cout, fencefd[cout]);
++            pr_err("sync_fence_fdget failed,fd[%d]:%d\n",cout, fencefd[cout]);
+             continue;
+         }
+         fencefd[coutoffence] = (int)fence;
+@@ -2017,13 +2021,14 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+             disp_data_list = mem_cache_alloc();
+             if(!disp_data_list){
+                 kfree(fencefd);
+-                printk("%s: %d, alloc data for disp_data_list fail.\n", __func__, __LINE__);
++                pr_err("%s: %d, alloc data for disp_data_list fail.\n", __func__, __LINE__);
+                 copy_to_user((void __user *)disp_data->returnfenceFd, &fd, sizeof(int));
+                 return -1;
+             }
+             fd = get_unused_fd();
+             if (fd < 0)
+             {
++                pr_err("no usable fd anymore\n");
+                 mem_cache_free(disp_data_list);
+                 kfree(fencefd);
+                 return -1;
+@@ -2042,6 +2047,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+                 queue_work(composer_priv.Display_commit_work, &composer_priv.commit_work);
+             }
+         }else{
++            pr_err("layer_num[0]:%d layer_num[1]:%d <= 0\n", disp_data->layer_num[0], disp_data->layer_num[1]);
+             kfree(fencefd);
+             return -1;
+         }
+@@ -2052,7 +2058,7 @@ static int hwc_commit(setup_dispc_data_t *disp_data)
+     }
+     if(copy_to_user((void __user *)disp_data->returnfenceFd, &fd, sizeof(int)))
+     {
+-	    printk("copy_to_user fail\n");
++	    pr_err("copy_to_user fail\n");
+ 	    return  -EFAULT;
+ 	}
+ 	return 0;
+@@ -2069,11 +2075,14 @@ static int hwc_commit_ioctl(unsigned int cmd, unsigned long arg)
+         memset(composer_priv.tmptransfer, 0, sizeof(setup_dispc_data_t));
+         if(copy_from_user(composer_priv.tmptransfer, (void __user *)ubuffer[1], sizeof(setup_dispc_data_t)))
+         {
+-            printk("copy_from_user fail\n");
++            pr_err("copy_from_user fail\n");
+             return  -EFAULT;
+ 		}
+         ret = hwc_commit(composer_priv.tmptransfer);
+ 	}
++        else {
++           pr_err("disp2: unknown cmd:%X COMMIT:%X\n", cmd, DISP_HWC_COMMIT);
++        }
+ 	return ret;
+ }
+ 
+@@ -2140,8 +2149,11 @@ static void imp_finish_cb(bool force_all)
+         {
+             break;
+         }
+-        sw_sync_timeline_inc(composer_priv.relseastimeline, 1);
+-        composer_frame_checkin(1);//release
++        //if(composer_priv.relseastimeline->value < composer_priv.Cur_Write_Cnt)
++        {
++            sw_sync_timeline_inc(composer_priv.relseastimeline, 1);
++            composer_frame_checkin(1);//release
++        }
+         flag = 1;
+     }
+     if(flag)
+@@ -2206,7 +2218,7 @@ int dispc_gralloc_queue(setup_dispc_data_t *psDispcData, unsigned int framenuber
+             }
+ 
+             psconfig = &psDispcData->layer_info[disp][0];
+-            psmgr->set_layer_config(psmgr, psconfig, disp?8:16);
++            psmgr->set_layer_config(psmgr, psconfig, psDispcData->layer_active[disp] /*disp?8:16*/);
+             bsp_disp_shadow_protect(disp,false);
+             if(composer_priv.display_active[disp] == 0)
+             {

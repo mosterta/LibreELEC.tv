@@ -2,7 +2,7 @@
   LTO_SUPPORT="yes"
 
 # GOLD (Google Linker) support
-  GOLD_SUPPORT="yes"
+  GOLD_SUPPORT="no"
 
 # Name of the Distro to build (full name, without special characters)
   DISTRONAME="LibreELEC"
@@ -41,22 +41,22 @@
   PULSEAUDIO_SUPPORT="yes"
 
 # build and install espeak support (yes / no)
-  ESPEAK_SUPPORT="yes"
+  ESPEAK_SUPPORT="no"
 
 # build and install with non-free support
 # (RAR compression support in KODI) (yes / no)
   KODI_NONFREE_SUPPORT="yes"
 
 # build and install with BluRay support (yes / no)
-  KODI_BLURAY_SUPPORT="yes"
+  KODI_BLURAY_SUPPORT="no"
 
 # build and install with BD+ support
 # (BD+ decryption support in KODI) (yes / no)
-  BLURAY_BDPLUS_SUPPORT="yes"
+  BLURAY_BDPLUS_SUPPORT="no"
 
 # build and install with AACS support
 # (BD decryption support in KODI) (yes / no)
-  BLURAY_AACS_SUPPORT="yes"
+  BLURAY_AACS_SUPPORT="no"
 
 # build and install with DVDCSS support
 # (DVD decryption support in KODI) (yes / no)
@@ -69,7 +69,7 @@
   ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8192EU RTL8188EU RTL8812AU"
 
 # build and install bluetooth support (yes / no)
-  BLUETOOTH_SUPPORT="yes"
+  BLUETOOTH_SUPPORT="no"
 
 # build and install with KODI webfrontend (yes / no)
   KODI_WEBSERVER_SUPPORT="yes"
@@ -81,40 +81,40 @@
   KODI_UPNP_SUPPORT="yes"
 
 # build with MySQL support (yes / no)
-  KODI_MYSQL_SUPPORT="yes"
+  KODI_MYSQL_SUPPORT="no"
 
 # build xbmc with sshlib support (yes / no)
-  KODI_SSHLIB_SUPPORT="yes"
+  KODI_SSHLIB_SUPPORT="no"
 
 # build xbmc with optical drive support (yes / no)
-  KODI_OPTICAL_SUPPORT="yes"
+  KODI_OPTICAL_SUPPORT="no"
 
 # build with AirPlay support (stream videos from iDevices to KODI) (yes / no)
-  KODI_AIRPLAY_SUPPORT="yes"
+  KODI_AIRPLAY_SUPPORT="no"
 
 # build with AirTunes support (stream music from iDevices to KODI) (yes / no)
-  KODI_AIRTUNES_SUPPORT="yes"
+  KODI_AIRTUNES_SUPPORT="no"
 
 # build with libnfs support (mounting nfs shares with KODI) (yes / no)
   KODI_NFS_SUPPORT="yes"
 
 # build with Samba Client support (mounting SAMBA shares with KODI) (yes / no)
-  KODI_SAMBA_SUPPORT="yes"
+  KODI_SAMBA_SUPPORT="no"
 
 # build with NFS support (mounting nfs shares via the OS) (yes / no)
   NFS_SUPPORT="yes"
 
 # build with Samba Client support (mounting samba shares via the OS) (yes / no)
-  SAMBA_SUPPORT="yes"
+  SAMBA_SUPPORT="no"
 
 # build and install Samba Server (yes / no)
-  SAMBA_SERVER="yes"
+  SAMBA_SERVER="no"
 
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
 
 # build and install OpenVPN support (yes / no)
-  OPENVPN_SUPPORT="yes"
+  OPENVPN_SUPPORT="no"
 
 # build and install diskmounter support (udevil)
 # this service provide auto mounting support for external drives in the
@@ -122,43 +122,43 @@
   UDEVIL="yes"
 
 # build and install exFAT fuse support (yes / no)
-  EXFAT="yes"
+  EXFAT="no"
 
 # build and install NTFS-3G fuse support (yes / no)
-  NTFS3G="yes"
+  NTFS3G="no"
 
 # build and install hfs filesystem utilities (yes / no)
-  HFSTOOLS="yes"
+  HFSTOOLS="no"
 
 # Windowmanager to use (fluxbox / none)
-  WINDOWMANAGER="fluxbox"
+  WINDOWMANAGER="none"
 
 # Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia)
 # Space separated list is supported,
 # e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia"
-  GRAPHIC_DRIVERS="r300 r600 radeonsi i915 i965 nvidia nvidia-legacy"
+  GRAPHIC_DRIVERS=""
 
 # build and install remote support (yes / no)
   REMOTE_SUPPORT="yes"
 
 # build and install ATV IR remote support (yes / no)
-  ATVCLIENT_SUPPORT="yes"
+  ATVCLIENT_SUPPORT="no"
 
 # build and install Joystick support (yes / no)
-  JOYSTICK_SUPPORT="yes"
+  JOYSTICK_SUPPORT="no"
 
 # build and install CEC adapter support (yes / no)
   CEC_SUPPORT="yes"
 
 # build and install iSCSI support - iscsistart (yes / no)
-  ISCSI_SUPPORT="yes"
+  ISCSI_SUPPORT="no"
 
 # Support for partitioning and formating disks in initramfs (yes / no)
 # This adds support for parted and mkfs.ext3/4 to initramfs for OEM usage
   INITRAMFS_PARTED_SUPPORT="no"
 
 # build with swap support (yes / no)
-  SWAP_SUPPORT="no"
+  SWAP_SUPPORT="yes"
 
 # swap support enabled per default (yes / no)
   SWAP_ENABLED_DEFAULT="no"

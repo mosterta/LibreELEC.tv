@@ -17,13 +17,14 @@
 ################################################################################
 
 PKG_NAME="kodi"
-PKG_VERSION="fc1619b"
+PKG_VERSION="9548a0c"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"
 PKG_SITE="http://www.kodi.tv"
-PKG_URL="https://github.com/xbmc/xbmc/archive/$PKG_VERSION.tar.gz"
+PKG_GIT_URL="https://github.com/mosterta/xbmc.git"
+PKG_GIT_BRANCH="master_allwinner_layered_vdpau"
 PKG_SOURCE_DIR="xbmc-$PKG_VERSION*"
-PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host TexturePacker:host xmlstarlet:host Python zlib systemd pciutils lzo pcre swig:host libass curl fontconfig fribidi tinyxml libjpeg-turbo freetype libcdio taglib libxml2 libxslt yajl sqlite ffmpeg crossguid giflib libdvdnav libhdhomerun"
+PKG_DEPENDS_TARGET="toolchain JsonSchemaBuilder:host xmlstarlet:host Python zlib systemd pciutils lzo pcre swig:host libass curl fontconfig fribidi tinyxml libjpeg-turbo freetype libcdio libmpeg2 taglib libxml2 libxslt yajl sqlite ffmpeg crossguid giflib libdvdnav libhdhomerun"
 PKG_SECTION="mediacenter"
 PKG_SHORTDESC="kodi: Kodi Mediacenter"
 PKG_LONGDESC="Kodi Media Center (which was formerly named Xbox Media Center or XBMC) is a free and open source cross-platform media player and home entertainment system software with a 10-foot user interface designed for the living-room TV. Its graphical user interface allows the user to easily manage video, photos, podcasts, and music from a computer, optical disk, local network, and the internet using a remote control."
@@ -168,7 +169,7 @@ else
   KODI_SSH="-DENABLE_SSH=OFF"
 fi
 
-if [ "$VDPAU_SUPPORT" = "yes" -a "$DISPLAYSERVER" = "x11" ]; then
+if [ "$VDPAU_SUPPORT" = "yes" ]; then
   PKG_DEPENDS_TARGET="$PKG_DEPENDS_TARGET libvdpau"
   KODI_VDPAU="-DENABLE_VDPAU=ON"
 else
@@ -198,6 +199,12 @@ if [ ! "$KODIPLAYER_DRIVER" = default ]; then
     CXXFLAGS="$CXXFLAGS -DHAS_IMXVPU -DLINUX -DEGL_API_FB"
   elif [ "$KODIPLAYER_DRIVER" = libamcodec ]; then
     KODI_PLAYER="-DENABLE_AML=ON"
+  elif [ "$KODIPLAYER_DRIVER" = cedarx ]; then
+    KODI_CODEC="--enable-codec=cedarx"   
+  elif [ "$KODIPLAYER_DRIVER" = libvdpau-sunxi ]; then
+    KODI_CODEC="--enable-platform=allwinner-mali"
+    KODI_PLAYER="-DCORE_SYSTEM_NAME=allwinner"
+    KODI_XORG="-DENABLE_X11=OFF"
   fi
 fi
 
